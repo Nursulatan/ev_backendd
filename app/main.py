@@ -1,36 +1,37 @@
 # app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 
-# .env жүктөө
-load_dotenv()
-
-# ❗ Салыштырма импорттор (алдына чекит бар)
-from .auth import router as auth_router
-from .otp import router as otp_router
-from .commands import router as admin_router
-from .ws import router as ws_router
+from auth import router as auth_router
+from otp import router as otp_router
+from commands import router as admin_router
+from ws import router as ws_router
 
 app = FastAPI(title="EV Voice Assistant API")
 
+# ---- CORS: Flutter веб (жергиликтүү) үчүн уруксаттар ----
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[       
-        "http://localhost:50076",
-        "http://127.0.0.1:50076",
-        "https://cool-boar-nursultan-b2e8446f.koyeb.app"
-],
+    allow_origins=[
+        "http://localhost:50076",     # VSCode Flutter web run
+        "http://127.0.0.1:50076",     # альтернатива
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(auth_router)
-app.include_router(otp_router)
-app.include_router(admin_router)
-app.include_router(ws_router)
+# ---- Роуттар ----
+app.include_router(auth_router, prefix="/auth", tags=["auth"])
+app.include_router(otp_router, prefix="/otp", tags=["otp"])
+app.include_router(admin_router, prefix="/admin", tags=["admin"])
+app.include_router(ws_router, prefix="/ws", tags=["ws"])
 
-@app.get("/")
+# ---- Healthcheck / Root (Koyeb/Render текшерүүсү үчүн пайдалуу) ----
+@app.get("/", tags=["meta"])
 def root():
-    return {"ok": True}
+    return {"ok": True, "service": "ev-backend"}
+
+@app.get("/health", tags=["meta"])
+def health():
+    return {"status": "healthy"}
