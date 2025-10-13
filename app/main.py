@@ -16,7 +16,11 @@ app = FastAPI(title="EV Voice Assistant API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[       
+        "http://localhost:50076",
+        "http://127.0.0.1:50076",
+        "https://cool-boar-nursultan-b2e8446f.koyeb.app"
+],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
