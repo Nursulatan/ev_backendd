@@ -15,17 +15,14 @@ def preflight_catch_all(rest_of_path: str, request: Request):
     return Response(status_code=204)
 
 # CORS
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:65218",
-        "http://localhost:50276",
-        "https://ev-backendd.onrender.com",   # кааласаң калтырсаң болот
-    ],
+    # localhost/127.0.0.1 каалаган порттон уруксат
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d{1,5})?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["Authorization"],
 )
 
 # МАҢИЛҮҮСҮ: бул жерде prefix КОШПОО!
