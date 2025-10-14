@@ -15,6 +15,9 @@ from app.ws import router as ws_router
 app = FastAPI(title="EV Voice Assistant API")
 
 
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "EV backend is running 🚀"}
 # -------------------------------------------------------
 #  🛠️ Preflight (OPTIONS) жооп – CORS текшерүүсү үчүн
 # -------------------------------------------------------
