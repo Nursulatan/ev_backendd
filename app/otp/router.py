@@ -2,6 +2,10 @@ from fastapi import APIRouter
 
 router = APIRouter(prefix="/otp", tags=["otp"])
 
-@router.get("/")
-def get_otp_status():
-    return {"status": "OTP service ready"}
+@router.post("/generate")
+async def generate_otp():
+    return {"status": "ok", "message": "OTP generated"}
+
+@router.post("/verify")
+async def verify_otp():
+    return {"status": "ok", "message": "OTP verified"}
