@@ -25,5 +25,5 @@ if not exist .env (
   echo .env created.
 )
 
-echo Starting server on http://127.0.0.1:8000 ...
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+echo Starting server on http://127.0.0.1:10000 ...
+python -m uvicorn app.main:app --host 127.0.0.1 --port 10000 --reload
