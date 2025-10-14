@@ -2,10 +2,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from auth import router as auth_router
-from otp import router as otp_router
-from commands import router as admin_router
-from ws import router as ws_router
+from .auth import router as auth_router
+from .otp import router as otp_router
+from .commands import router as admin_router
+from .ws import router as ws_router
 from fastapi import Request, Response
 
 @app.options("/{rest_of_path:path}")
