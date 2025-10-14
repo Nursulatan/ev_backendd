@@ -9,6 +9,9 @@ from app.ws.router import router as ws_router
 
 app = FastAPI(title="EV Voice Assistant API")
 
+@app.get("/")
+def health():
+    return {"status": "ok", "message": "EV backend is running 🚀"}
 # Preflight helper (каалга ачуу үчүн OPTIONS жооп)
 @app.options("/{rest_of_path:path}")
 def preflight_catch_all(rest_of_path: str, request: Request):
