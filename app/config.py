@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+# app/config.py
 import os
-class Settings(BaseModel):
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "change_me")
-    ADMIN_USERNAME: str = os.getenv("ADMIN_USERNAME", "admin")
-    ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "admin")
-    REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-    OTP_TTL_SECONDS: int = int(os.getenv("OTP_TTL_SECONDS", "180"))
-    JWT_EXPIRES_MINUTES: int = int(os.getenv("JWT_EXPIRES_MINUTES", "1440"))
+
+class Settings:
+    ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+    ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "supersecret")
+    JWT_SECRET     = os.getenv("JWT_SECRET", "change-me-please")
+    JWT_EXPIRES_MIN = int(os.getenv("JWT_EXPIRES_MIN", "60"))
+
 settings = Settings()
