@@ -2,10 +2,11 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 # 🔧 Пакеттик (relative) импорттор – бул абдан маанилүү!
-from .auth import router as auth_router
-from .otp import router as otp_router
-from .commands import router as admin_router
-from .ws import router as ws_router
+
+from app.auth import router as auth_router
+from app.otp import router as otp_router
+from app.commands import router as admin_router
+from app.ws import router as ws_router
 
 
 # -------------------------------------------------------

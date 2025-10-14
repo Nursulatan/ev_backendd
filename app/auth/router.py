@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 # 🔧 Туура импорттор (пакет ичинен)
-from .._deps import create_jwt
-from .._config import settings
+from app._deps import create_jwt
+from app._config import settings
 
 # Router түзөбүз
 router = APIRouter(prefix="/auth", tags=["auth"])
