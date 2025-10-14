@@ -1,28 +1,36 @@
-# app/main.py
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
+# 🔧 Пакеттик (relative) импорттор – бул абдан маанилүү!
 from .auth import router as auth_router
 from .otp import router as otp_router
 from .commands import router as admin_router
 from .ws import router as ws_router
-from fastapi import Request, Response
 
+
+# -------------------------------------------------------
+#  🧠 FastAPI тиркемесин түзөбүз
+# -------------------------------------------------------
+app = FastAPI(title="EV Voice Assistant API")
+
+
+# -------------------------------------------------------
+#  🛠️ Preflight (OPTIONS) жооп – CORS текшерүүсү үчүн
+# -------------------------------------------------------
 @app.options("/{rest_of_path:path}")
 def preflight_catch_all(rest_of_path: str, request: Request):
     return Response(status_code=204)
 
-app = FastAPI(title="EV Voice Assistant API")
 
-# ---- CORS: Flutter веб (жергиликтүү) үчүн уруксаттар ----
-
-
+# -------------------------------------------------------
+#  🌍 CORS Орнотуулары
+# -------------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:65218",   # сенин Flutter web портуң
-        "http://localhost:50076",
-        "https://senin-frontend-domenin.kg",
+        "http://localhost:65218",
+        "http://localhost:50276",
+        "https://senin-frontend-domenin.kg",  # өз фронтенд домениңди бул жакка жаз
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -31,17 +39,10 @@ app.add_middleware(
 )
 
 
-# ---- Роуттар ----
-app.include_router(auth_router, prefix="/auth", tags=["auth"])
-app.include_router(otp_router, prefix="/otp", tags=["otp"])
-app.include_router(admin_router, prefix="/admin", tags=["admin"])
-app.include_router(ws_router, prefix="/ws", tags=["ws"])
-
-# ---- Healthcheck / Root (Koyeb/Render текшерүүсү үчүн пайдалуу) ----
-@app.get("/", tags=["meta"])
-def root():
-    return {"ok": True, "service": "ev-backend"}
-
-@app.get("/health", tags=["meta"])
-def health():
-    return {"status": "healthy"}
+# -------------------------------------------------------
+#  📦 Роутерлерди кошобуз
+# -------------------------------------------------------
+app.include_router(auth_router)
+app.include_router(otp_router)
+app.include_router(admin_router)
+app.include_router(ws_router)
