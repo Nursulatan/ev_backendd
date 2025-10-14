@@ -6,6 +6,11 @@ from auth import router as auth_router
 from otp import router as otp_router
 from commands import router as admin_router
 from ws import router as ws_router
+from fastapi import Request, Response
+
+@app.options("/{rest_of_path:path}")
+def preflight_catch_all(rest_of_path: str, request: Request):
+    return Response(status_code=204)
 
 app = FastAPI(title="EV Voice Assistant API")
 
@@ -14,11 +19,17 @@ app = FastAPI(title="EV Voice Assistant API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_origins=[
+        "http://localhost:65218",   # сенин Flutter web портуң
+        "http://localhost:50076",
+        "https://senin-frontend-domenin.kg",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Authorization"],
 )
+
 
 # ---- Роуттар ----
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
