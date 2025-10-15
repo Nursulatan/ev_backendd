@@ -6,8 +6,11 @@ from app.auth.router import router as auth_router
 from app.otp.router import router as otp_router
 from app.commands.router import router as admin_router
 from app.ws.router import router as ws_router
+from app.ai.router import router as ai_router
 
 app = FastAPI()
+
+app.include_router(ai_router)
 
 @app.get("/")
 @app.head("/")
