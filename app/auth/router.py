@@ -2,7 +2,7 @@
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 from app.config import settings
-from app.deps import create_jwt
+from app.deps import create_jwt, get_current_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
