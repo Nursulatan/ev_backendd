@@ -1,8 +1,8 @@
 import requests
-import time
+import os, time, requests
 
-# Түз URL — бекенддин өзүңдүкү
-URL = "https://ev-backendd.onrender.com"
+URL = os.getenv("KEEPALIVE_URL", "https://ev-backendd.onrender.com")  # домениң туура экенин текшер
+
 
 def keep_alive():
     while True:

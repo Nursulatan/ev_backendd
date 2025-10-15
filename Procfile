@@ -1,1 +1,3 @@
-web: uvicorn app.main:app --host 0.0.0.0 --port 10000
+web: uvicorn app.main:app --host 0.0.0.0 --port 8000
+worker: python -u app/keep_alive.py
+

@@ -7,11 +7,12 @@ from app.otp.router import router as otp_router
 from app.commands.router import router as admin_router
 from app.ws.router import router as ws_router
 
-app = FastAPI(title="EV Voice Assistant API")
+app = FastAPI()
 
 @app.get("/")
-def health():
-    return {"status": "ok", "message": "EV backend is running 🚀"}
+@app.head("/")
+def root():
+    return{ "message": "EV backend is running 🚀"}
 # Preflight helper (каалга ачуу үчүн OPTIONS жооп)
 @app.options("/{rest_of_path:path}")
 def preflight_catch_all(rest_of_path: str, request: Request):
