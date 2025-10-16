@@ -4,12 +4,15 @@ import requests
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
 
-API_URL = f"https://generativelanguage.googleapis.com/v1/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
-
+# Моделди URL'ге кошпойбуз – модел body'де "models/..." форматында кетет
+API_URL = f"https://generativelanguage.googleapis.com/v1/models:generateContent?key={GEMINI_API_KEY}"
 HEADERS = {"Content-Type": "application/json"}
 
 def ask_gemini(message: str) -> str:
-    payload = {"contents": [{"parts": [{"text": message}]}]}
+    payload = {
+        "model": f"models/{GEMINI_MODEL}",
+        "contents": [{"parts": [{"text": message}]}],
+    }
     try:
         resp = requests.post(API_URL, headers=HEADERS, json=payload, timeout=30)
         if resp.status_code == 200:
