@@ -17,7 +17,7 @@ def create_jwt(payload: dict, expires_in: int = 3600) -> str:
     """
     to_encode = payload.copy()
     to_encode["exp"] = datetime.utcnow() + timedelta(seconds=expires_in)
-    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(to_encode, settings.secret_key,ALGORITHM)
 
 
 def decode_jwt(token: str) -> Dict:
@@ -25,7 +25,7 @@ def decode_jwt(token: str) -> Dict:
     JWT текшерип-декоддойт. Мөөнөтү өтсө же туура эмес болсо — 401.
     """
     try:
-        return jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+        return jwt.decode(token, settings.secret_key,s=[ALGORITHM])
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
