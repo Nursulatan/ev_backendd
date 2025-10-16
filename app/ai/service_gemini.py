@@ -7,10 +7,10 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
 if not GEMINI_API_KEY:
     raise RuntimeError("GEMINI_API_KEY is missing. Set it in Render → Environment.")
 
-API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+API_URL = f"https://generativelanguage.googleapis.com/v1beta1/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
 
 def ask_gemini(message: str) -> str:
-    """
+    """ 
     Жөнөкөй текст суроо-жооп.
     """
     payload = {
