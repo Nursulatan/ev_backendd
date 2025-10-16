@@ -1,29 +1,35 @@
-from fastapi import APIRouter, HTTPException
+# app/ai/router.py
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from openai import OpenAI
-from app.config import settings
+import os
+
+from app.deps import require_admin  # токен текшерүүң кандай болсо ошол
 
 router = APIRouter(prefix="/ai", tags=["ai"])
 
 class AskBody(BaseModel):
     message: str
 
-@router.post("/ask")
-async def ai_ask(body: AskBody):
-    if not settings.OPENAI_API_KEY:
+# ЭЧ кандай proxies/extra параметр бербейбиз!
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")  # кааласаң ENV’ге кой
+
+@router.post("/ask", dependencies=[Depends(require_admin)])
+def ai_ask(body: AskBody):
+    if not client.api_key:
         raise HTTPException(status_code=500, detail="OPENAI_API_KEY орнотулган эмес")
 
     try:
-        client = OpenAI(api_key=settings.OPENAI_API_KEY)
-
-        completion = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "Сен жардамчысың, кыргызча так жооп бер."},
-                {"role": "user", "content": body.message},
-            ],
+        # Responses API (v1) – жөнөкөй жолу
+        resp = client.responses.create(
+            model=MODEL,
+            input=body.message,
         )
+        # Жооптун жөнөкөй тексти:
+        answer = getattr(resp, "output_text", None) or "no output"
+        return {"answer": answer}
 
-        return {"answer": completion.choices[0].message.content}
     except Exception as e:
+        # Диагностика үчүн кыска, 500 кайтарабыз
         raise HTTPException(status_code=500, detail=str(e))
