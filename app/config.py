@@ -6,7 +6,9 @@ class Settings(BaseSettings):
     # Админ логин/пароль
     admin_username: str = Field(default="admin", alias="ADMIN_USERNAME")
     admin_password: str = Field(default="supersecret", alias="ADMIN_PASSWORD")
-
+    PENAI_API_KEY: str = Field(default_factory=lambda: os.getenv("OPENAI_API_KEY", ""))
+    OPENAI_MODEL: str = Field(default_factory=lambda: os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
+    OPENAI_BASE_URL: str = Field(default_factory=lambda: os.getenv("OPENAI_BASE_URL", ""))  # кааласаң
     # JWT конфигурациясы
     secret_key: str = Field(..., alias="SECRET_KEY")
     access_token_expire_minutes: int = Field(default=3600, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
