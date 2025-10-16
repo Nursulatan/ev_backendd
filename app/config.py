@@ -1,4 +1,5 @@
 # app/config.py
+import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
 
