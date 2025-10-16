@@ -4,8 +4,9 @@ import requests
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
 
-# Моделди URL'ге кошпойбуз – модел body'де "models/..." форматында кетет
-API_URL = f"https://generativelanguage.googleapis.com/v1/models:generateContent?key={GEMINI_API_KEY}"
+# Кээ бир моделдер v1 эмес, v1beta2 астында гана жеткиликтүү.
+API_URL = f"https://generativelanguage.googleapis.com/v1beta2/models:generateContent?key={GEMINI_API_KEY}"
+
 HEADERS = {"Content-Type": "application/json"}
 
 def ask_gemini(message: str) -> str:
