@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+# app/ai/router.py
+from fastapi import APIRouter
 from pydantic import BaseModel
-from app.ai.service_gemini import ask_gemini
+from app.ai import ask_gemini   # <-- Мына ушундай
 
 router = APIRouter(prefix="/ai", tags=["AI"])
 
@@ -9,11 +10,5 @@ class AskBody(BaseModel):
 
 @router.post("/ask")
 def ai_ask(body: AskBody):
-    """
-    Google Gemini'ге суроо жиберип, жооп кайтарат.
-    """
-    try:
-        response = ask_gemini(body.message)
-        return {"answer": response}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    answer = ask_gemini(body.message)
+    return {"answer": answer, "provider": "gemini"}
