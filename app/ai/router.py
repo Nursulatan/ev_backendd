@@ -1,20 +1,19 @@
-# app/ai/router.py
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from app.ai.service_gemini import ask_gemini
 
-from app.deps import require_admin  # сендеги токен текшергич
-from app.ai.service import ask
-
-router = APIRouter(prefix="/ai", tags=["ai"])
+router = APIRouter(prefix="/ai", tags=["AI"])
 
 class AskBody(BaseModel):
     message: str
 
-@router.post("/ask", dependencies=[Depends(require_admin)])
+@router.post("/ask")
 def ai_ask(body: AskBody):
+    """
+    Google Gemini'ге суроо жиберип, жооп кайтарат.
+    """
     try:
-        answer = ask(body.message)
-        return {"answer": answer}
+        response = ask_gemini(body.message)
+        return {"answer": response}
     except Exception as e:
-        # Кыска жана түшүнүктүү 500
         raise HTTPException(status_code=500, detail=str(e))

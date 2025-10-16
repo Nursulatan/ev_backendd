@@ -8,7 +8,7 @@ from app.commands.router import router as admin_router
 from app.ws.router import router as ws_router
 from app.ai.router import router as ai_router
 
-app = FastAPI()
+app = FastAPI(title="AI Backend (Gemini version)")
 
 app.include_router(ai_router)
 
