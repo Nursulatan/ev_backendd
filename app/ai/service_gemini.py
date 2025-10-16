@@ -2,11 +2,12 @@ import os
 import requests
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-API_VERSION = "v1"                 # МУРУН: v1beta -> Азыр: v1
-MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash-latest")
-URL = f"https://generativelanguage.googleapis.com/{API_VERSION}/models/{MODEL}:generateContent?key={GEMINI_API_KEY}"
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+
+API_URL = f"https://generativelanguage.googleapis.com/v1/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
 
 HEADERS = {"Content-Type": "application/json"}
+
 
 def gemini_answer(message: str) -> str:
     payload = {
@@ -14,8 +15,13 @@ def gemini_answer(message: str) -> str:
             {"parts": [{"text": message}]}
         ]
     }
-    r = requests.post(URL, headers=HEADERS, json=payload, timeout=20)
-    r.raise_for_status()
-    data = r.json()
-    # Жоопту чыгаруу (v1 форматы)
+
+    response = requests.post(API_URL, headers=HEADERS, json=payload, timeout=20)
+
+    if response.status_code != 200:
+        # катаны логго түшүр
+        print("Gemini API error:", response.text)
+        return f"Gemini error: {response.text}"
+
+    data = response.json()
     return data["candidates"][0]["content"]["parts"][0]["text"]
