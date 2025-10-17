@@ -4,16 +4,14 @@ import requests
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 
-_raw_model = os.getenv("GEMINI_MODEL", "gemini-1.5-flash").strip()
-# .env’де кокус "models/..." же ":latest" болуп келсе да тазалайбыз
+_raw_model = os.getenv("GEMINI_MODEL", "gemini-1.5-flash-8b").strip()
 GEMINI_MODEL = (
     _raw_model.replace("models/", "")
               .replace("model/", "")
               .replace(":latest", "")
 )
-
-# v1beta ЭМЕС, v1 колдонообуз
 API_URL = f"https://generativelanguage.googleapis.com/v1/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+
 
 HEADERS = {"Content-Type": "application/json"}
 
