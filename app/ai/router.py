@@ -1,6 +1,7 @@
+# app/ai/router.py
 from fastapi import APIRouter
 from pydantic import BaseModel
-from .service_gemini import ask_gemini
+from app.ai.provider import answer_text
 
 router = APIRouter(prefix="/ai", tags=["AI"])
 
@@ -9,12 +10,6 @@ class AskIn(BaseModel):
 
 @router.post("/ask")
 def ai_ask(body: AskIn):
-    answer = ask_gemini(body.message)
-    return {"answer": answer, "provider": "gemini"}
-
-@router.get("/models")
-def list_gemini_models():
-    api_key = os.getenv("GEMINI_API_KEY", "").strip()
-    url = f"https://generativelanguage.googleapis.com/v1beta/models?key={api_key}"
-    r = requests.get(url, timeout=20)
-    return {"status": r.status_code, "data": r.json() if r.headers.get("content-type","").startswith("application/json") else r.text}
+    ans = answer_text(body.message)
+    # провайдерди логдоо үчүн кошумча талаа жок, керек болсо айлана-чөйрөдөн окуп берсең болот
+    return {"answer": ans, "provider": "gemini/local"}

@@ -1,11 +1,15 @@
-# app/ai/provider.py
+from app.assistant.commands import handle_local_command
+from app.ai.service_gemini import ask_gemini
 import os
 
-PROVIDER = os.getenv("AI_PROVIDER", "gemini").lower()
+AI_PROVIDER = os.getenv("AI_PROVIDER","gemini").lower()
 
-if PROVIDER == "openrouter":
-    from .service_openrouter import ask_openrouter as ask_ai
-elif PROVIDER == "ollama":
-    from .service_ollama import ask_ollama as ask_ai
-else:
-    from .service_gemini import ask_gemini as ask_ai
+def answer_text(message: str) -> str | dict:
+    local = handle_local_command(message)
+    if local:
+        # Машинага жөнөтүү үчүн dict кайтарып жатсаң — ошол боюнча колдонуңуз.
+        # UIга адамча текст көрсөтсөңүз, local.get("say") колдонсоңуз болот.
+        return local
+    if AI_PROVIDER == "gemini":
+        return {"type":"chat","answer": ask_gemini(message)}
+    return {"type":"chat","answer":"Команда түшүнүксүз 🙏"}
