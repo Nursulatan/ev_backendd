@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from .models import Command, Macro, AssistantConfig
+# from .models import Command, Macro, AssistantConfig
 from .schemas import ConfigResponse
 from .deps import get_current_admin
 router = APIRouter(prefix='/admin', tags=['admin'])
