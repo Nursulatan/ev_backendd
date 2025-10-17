@@ -2,9 +2,10 @@ import os
 import requests
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-GEMINI_MODEL   = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+# кокус .env'ге models/... деп жазылып калса да тазалап коёбуз
+_raw_model = os.getenv("GEMINI_MODEL", "gemini-1.5-flash").strip()
+GEMINI_MODEL = _raw_model.replace("models/", "").replace("model/", "").replace(":latest", "")
 
-# v1beta керек — көп аккаунттарда дал ушул иштейт
 API_URL = (
     f"https://generativelanguage.googleapis.com/v1beta/models/"
     f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
@@ -13,16 +14,9 @@ API_URL = (
 HEADERS = {"Content-Type": "application/json"}
 
 def ask_gemini(message: str) -> str:
-    """
-    Колдонуучудан келген текстти Gemini'ге жөнөтүп, текст жоопту кайтарат.
-    """
     payload = {
         "contents": [
-            {
-                "parts": [
-                    {"text": message}
-                ]
-            }
+            {"parts": [{"text": message}]}
         ]
     }
 
@@ -31,25 +25,19 @@ def ask_gemini(message: str) -> str:
     except Exception as e:
         return f"Gemini request error: {e}"
 
-    # HTTP ката болсо — текст катары кайтаруу
+    # HTTP ката болсо — текст менен кайтарабыз
     if resp.status_code != 200:
-        try:
-            err = resp.json()
-        except Exception:
-            err = resp.text
-        return f"Gemini error {resp.status_code}: {err}"
+        # Диагностика үчүн толук текст
+        return f"Gemini error {resp.status_code}: {resp.text}"
 
-    # Ийгиликтүү жоопту парсинг
     try:
         data = resp.json()
-        # candidates[0].content.parts[0].text схемасы
-        return (
+        text = (
             data.get("candidates", [{}])[0]
                 .get("content", {})
                 .get("parts", [{}])[0]
                 .get("text", "")
-                .strip()
-            or "Жооп бош келди."
         )
+        return text.strip() or "Жооп бош келди."
     except Exception as e:
         return f"Gemini parse error: {e}"
