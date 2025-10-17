@@ -10,7 +10,7 @@ GEMINI_MODEL = (
               .replace("model/", "")
               .replace(":latest", "")
 )
-API_URL = f"https://generativelanguage.googleapis.com/v1/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+API_URL = f"https://generativelanguage.googleapis.com/v1/models/{GEMINI_MODEL}:generateContent?key={AIzaSyC4FwxpcPUOL7EEWWzNe-hugrWOaGsR1Tk}"
 
 
 HEADERS = {"Content-Type": "application/json"}
