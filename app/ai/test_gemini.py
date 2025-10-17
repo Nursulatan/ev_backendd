@@ -5,7 +5,7 @@ import requests
 
 API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 MODEL   = os.getenv("GEMINI_MODEL", "gemini-1.5-flash").strip()
-URL     = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={API_KEY}"
+URL     = f"https://generativelanguage.googleapis.com/v1beta/{MODEL}:generateContent?key={API_KEY}"
 
 def main():
     if not API_KEY:
