@@ -2,6 +2,7 @@
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from app.ai.router import router as ai_router
+from app.assistant.router import router as assistant_router
 
 app = FastAPI(title="Car Assistant (Local + Gemini)")
 
@@ -24,3 +25,4 @@ app.add_middleware(
 )
 
 app.include_router(ai_router)
+app.include_router(assistant_router)
