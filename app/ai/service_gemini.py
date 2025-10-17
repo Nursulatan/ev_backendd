@@ -8,7 +8,7 @@ _raw_model = os.getenv("GEMINI_MODEL", "gemini-1.5-flash").strip()
 GEMINI_MODEL = _raw_model.replace("models/", "").replace("model/", "").replace(":latest", "")
 
 API_URL = (
-    f"https://generativelanguage.googleapis.com/v1beta/models/"
+    f"https://generativelanguage.googleapis.com/v1beta/"
     f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
 )
 
