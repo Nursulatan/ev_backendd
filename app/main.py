@@ -3,6 +3,9 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from app.ai.router import router as ai_router
 from app.assistant.router import router as assistant_router
+from app.car.router import router as car_router
+from app.gateway.router import router as gateway_ws_router
+from app.gateway.token_router import router as gateway_token_router
 
 app = FastAPI(title="Car Assistant (Local + Gemini)")
 
@@ -26,3 +29,7 @@ app.add_middleware(
 
 app.include_router(ai_router)
 app.include_router(assistant_router)
+# ... башка include'дар ...
+app.include_router(car_router)  # /car/...
+app.include_router(gateway_token_router)
+app.include_router(gateway_ws_router)
