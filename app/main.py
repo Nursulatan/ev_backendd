@@ -5,7 +5,7 @@ from app.ai.router import router as ai_router
 from app.assistant.router import router as assistant_router
 from app.car.router import router as car_router
 from app.gateway.router import router as gateway_ws_router
-from app.gateway.token_router import router as gateway_token_router
+from app.gateway.token_router import router as gateway_token_router # type: ignore
 
 app = FastAPI(title="Car Assistant (Local + Gemini)")
 
