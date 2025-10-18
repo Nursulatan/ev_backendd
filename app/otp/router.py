@@ -1,22 +1,17 @@
-# app/auth/router.py
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter
 from pydantic import BaseModel
 
-from app.config import settings
-from app.deps import create_jwt
+router = APIRouter(prefix="/otp", tags=["OTP"])
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+class OtpCode(BaseModel):
+    code: str
 
+@router.post("/generate")
+async def generate_otp():
+    # азырынча демо жооп
+    return {"status": "ok", "message": "OTP generated", "code": "123456"}
 
-class AdminLogin(BaseModel):
-    username: str
-    password: str
-
-
-@router.post("/admin/login")
-def admin_login(body: AdminLogin):
-    if body.username != settings.admin_username or body.password != settings.admin_password:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-
-    token = create_jwt({"sub": body.username, "role": "admin"}, expires_in=settings.access_token_expire_minutes)
-    return {"access_token": token, "token_type": "bearer"}
+@router.post("/verify")
+async def verify_otp(body: OtpCode):
+    ok = body.code == "123456"
+    return {"status": "ok" if ok else "fail", "valid": ok}
